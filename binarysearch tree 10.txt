@@ -1,0 +1,162 @@
+nclude<stdio.h>
+#include<stdlib.h>
+struct BSTNode
+{
+   int data;
+   struct BSTNode *left;
+   struct BSTNode *right;
+};
+typedef struct BSTNode node; 
+int flag=0;
+node *root = NULL;
+node* createBST(node*, int);
+node* insertBST(node *root,int value);
+void  displayBST(node *);
+node* deleteBST(node* root ,int val );
+int findMinRST(node *); 
+node* searchBST(node *root,int key);
+
+int main()
+{
+   int ch, val;
+   node *temp; 
+    printf("\nBinary Search Tree Operations\n");
+   while(1){
+       
+      scanf("%d",&ch);
+      switch(ch)
+      {
+	    case 1: 
+		        scanf("%d", &val);
+		        root = insertBST(root,val);
+		        break;
+	    case 2:
+	             scanf("%d",&val);
+	             root=deleteBST(root,val);
+	             if(flag==1)
+	              printf("\nCannot delete - %d is not found or BST empty",val);
+                 else
+                  printf("\n%d is found and deleted from BST",val);
+	             break;
+	    case 3: if(root==NULL)
+	               printf("\nBST EMPTY");
+	            else
+                {
+	             printf("\nINORDER TRAVERSAL OF BST: ");
+	             displayBST(root);
+                }
+	            break;
+	   case 4:  
+	             scanf("%d",&val);
+	             temp=searchBST(root,val);
+	             if(temp == NULL)
+	              printf("\nSearch Unsuccessful %d is not found in BST",val);
+	             else
+	              printf("\nSearch Successful %d is found in BST",val);
+	             break;
+	 case 5:exit(0);
+	 default: printf("\nInvalid Choice");
+      }
+   }
+}
+
+
+node* createBST(node *root,int value)
+{
+   node *newNode;
+   newNode = (node *)malloc(sizeof(node));
+   newNode->data = value;
+   newNode->left = newNode->right = NULL;
+   return(newNode);
+ }
+  
+ 
+node* insertBST(node *root,int value)
+   {
+      if(root == NULL)
+        root=createBST(root,value);
+      else if(value<root->data)
+	    root->left = insertBST(root->left,value);
+      else
+	    root->right = insertBST(root->right,value);
+	  return root; 
+   }
+
+
+
+void displayBST(node *root)
+{
+   if(root != NULL)
+   {
+      displayBST(root->left);
+      printf("%d ",root->data);
+      displayBST(root->right);
+   }
+}
+
+node *deleteBST(node *root, int val)
+{
+   node* temp;
+    if(root == NULL)
+    {   
+        flag=1;
+        return NULL; 
+    }
+    if(val > root->data)
+        root->right = deleteBST(root->right,val);
+    else if(val < root->data)
+        root->left = deleteBST(root->left,val);
+    else
+    {
+        flag=0;
+        if(root->left == NULL && root->right == NULL) 
+        {
+            temp=root;
+            free(temp);
+            root=NULL;
+        }
+        else if(root->left == NULL) 
+        {
+            temp=root;
+            root=root->right;
+            free(temp);
+        }
+        else if(root->right == NULL) 
+        {
+            temp = root;
+            root=root->left;
+            free(temp);
+        }
+        else
+        {
+            int rightMin = findMinRST(root->right);
+            root->data = rightMin;
+            root->right = deleteBST(root->right,rightMin);
+        }
+
+    }
+ return root;
+}
+
+
+int findMinRST(node *temp) 
+{
+  while(temp->left != NULL)
+   { 
+    temp = temp->left;
+   }
+    return temp->data;
+}
+
+
+node *searchBST(node *root, int val)
+{
+    if(root == NULL)
+       return NULL;
+    if(root->data==val)
+       return root;
+    if(val > root->data)
+       return(searchBST(root->right,val));
+    else if(val < root->data)
+        return(searchBST(root->left,val));
+}

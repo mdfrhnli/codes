@@ -1,0 +1,83 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+int c=0;
+struct node *head;
+void enqueue(int);
+void dequeue();
+void display();
+void main()
+{
+    int n,a,p,ch;
+    head=NULL;
+    while(1)
+    {
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1:scanf("%d",&n);
+            enqueue(n);
+            break;
+            case 2:dequeue();
+            break;
+            case 3:display();
+            break;
+            case 4:exit(0);
+            break;
+            default: printf("\nInvalid Choice");
+        }
+    }
+}
+void enqueue(int n)
+{
+    int i;
+    struct node *temp=(struct node *)malloc(sizeof(struct node));
+    struct node *x;
+    c++;
+    temp->data=n;
+    temp->next=NULL;
+    if(head==NULL)
+    head=temp;
+    else
+    {
+        x=head;
+        for(i=0;i<c-2;i++)
+        x=x->next;
+        x->next=temp;
+        
+    }
+}
+void dequeue()
+{
+    int i;
+    struct node *temp1=head;
+    if(head==NULL)
+    printf("\nQUEUE UNDERFLOW-No nodes to delete");
+    else
+    {
+        c--;
+        i=temp1->data;
+        head=temp1->next;
+        printf("\nTHE DEQUEUED NODE VAL=%d",i);
+        free(temp1);
+    }
+}
+void display()
+{
+    struct node *x;
+    x=head;
+    printf("\n");
+    if(head==NULL)
+    printf("\nEmpty QUEUE - NOTHING TO DISPLAY");
+    else{
+        printf("\nTHE ELEMENTS OF QUEUE ARE -");
+        while(x!=NULL){
+            printf("%d->",x->data);
+            x=x->next;
+        }
+    }
+}

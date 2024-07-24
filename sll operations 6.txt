@@ -1,0 +1,158 @@
+#include<stdio.h>
+#include<stdlib.h>
+ struct SLLnode
+ {
+ int data;
+ struct SLLnode *next;
+ };
+ typedef struct SLLnode node;
+ node *start=NULL;
+ int count=0;
+ void SLLdisplay();
+ void SLLdeletepos(int x);
+ void SLLinsertpos(int pos);
+ node* SLLsearch(int key);
+ int SLLcountnodes();
+ void SLLreversedisplay(node *temp);
+ int main()
+ {
+ node *found;
+ int ch,pos,key;
+
+ while(1)
+ {
+ 
+
+ scanf("%d",&ch);
+switch(ch)
+ {
+ case 1:
+ scanf("%d",&pos);
+ SLLinsertpos(pos);
+ break;
+ case 2:
+ scanf("%d",&pos);
+ SLLdeletepos(pos);
+ break;
+ case 3:SLLdisplay();
+ break;
+ case 4:
+ scanf("%d",&key);
+ found=SLLsearch(key);
+ if(found==NULL)
+ printf("\n%d is not found in SLL",key);
+ else
+ printf("\n%d is found in SLL",key);
+ break;
+ case 5:printf("\nNo of nodes in SLL = %d",SLLcountnodes());
+ break;
+ case 6:printf("\n");
+ SLLreversedisplay(start);
+ break;
+ case 7:exit(0);
+
+ break;
+ }
+ }
+ }
+ void SLLreversedisplay(node * temp)
+ {
+ if(temp!=NULL)
+ {
+ SLLreversedisplay(temp->next);
+ printf("%d ",temp->data);
+ }
+}
+ void SLLdisplay()
+ {
+ node *temp=start;
+ if(start==NULL)
+ {
+ printf("\nEmpty SLL- Cannot display");
+ return;
+ }
+ printf("\n");
+ do
+ {
+ printf("%d->",temp->data);
+ temp=temp->next;
+ }while(temp!=NULL);
+ }
+ int SLLcountnodes()
+ {
+ node *temp=start;
+ int c=0;
+ while(temp!=NULL)
+ {
+ c++;
+ temp=temp->next;
+ }
+ return(c);
+ }
+ void SLLdeletepos(int pos)
+ {
+ node *temp=start,*delnode;
+ int i;
+ if(pos<0||count==0||pos>count)
+ {
+ printf("\nPosition does not exist- Cannot delete from SLL");
+ return;
+ }
+ if(pos==1)
+{
+ delnode=start;
+ start=start->next;
+ }
+ else
+ {
+ for(i=1;i<=pos-2;i++)
+ {
+ temp=temp->next;
+ }
+ delnode=temp->next;
+ temp->next=delnode->next;
+ }
+ count--;
+ printf("\nDeleted element from SLL is %d",delnode->data);
+ free(delnode);
+ }
+ void SLLinsertpos(int pos)
+ {
+ int i;
+ node *newnode,*temp=start,*prev;
+ if(pos<1||pos>count+1)
+ {
+ printf("\nPosition does not exist- Cannot insert into SLL");
+ return;
+ }
+ newnode=(node*)malloc(sizeof(node));
+ //printf("Enter data into node of SLL:");
+ scanf("%d",&newnode->data);
+ count++;
+ if(pos==1)
+ {
+ newnode->next=start; // add / link up all the nodes with the newnode as start
+ start=newnode;
+ }
+ else
+ {
+ for(i=1;i<pos;i++)
+ {
+prev=temp;
+ temp=temp->next;
+ }
+ newnode->next=prev->next;
+ prev->next=newnode;
+ }
+ }
+ node* SLLsearch(int key)
+ {
+ node *temp=start;
+ while(temp!=NULL)
+ {
+ if(key==temp->data)
+ return(temp);
+ temp=temp->next;
+ }
+ return(NULL);
+ }

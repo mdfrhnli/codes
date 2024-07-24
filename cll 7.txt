@@ -1,0 +1,167 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct CLLnode
+{
+    int data;
+    struct CLLnode *next;
+};
+typedef struct CLLnode node; 
+node *start=NULL;//HEAD POINTER
+int count=0;
+void CLLdisplay();
+void CLLdeletepos(int x);
+void CLLinsertpos(int pos);
+node* CLLsearch(int key);
+
+int main()
+{
+    node *found;
+    int ch,pos,key;
+    //printf("\nOPERATIONS ON CIRCULAR LINKED LIST\n");
+    while(1)
+    {
+        //printf("\n 1.Insert 2.Delete 3.Display 4.Search 5.Exit \n Enter your choice:");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1://printf("\n Enter position to insert into CLL:");
+            scanf("%d",&pos);
+            CLLinsertpos(pos);
+	        break;
+            case 2://printf("\n Enter position to delete from CLL:");
+            scanf("%d",&pos);
+	        CLLdeletepos(pos);
+	        break;
+            case 3:CLLdisplay();
+            break;	   
+            case 4://printf("\n Enter an element to search in CLL:");
+            scanf("%d",&key);
+	        found=CLLsearch(key);
+	        if(found==NULL)
+	        printf("\n%d is not found in CLL",key);
+	        else
+	        printf("\n%d is found in CLL",key);
+	        break;
+            case 5:exit(0);
+            default:printf("\nInvalid Choice");
+            break;
+        }
+    }
+}
+
+void CLLdisplay()
+{
+    node *temp=start;
+    if(start==NULL)
+    {
+        printf("\nEmpty CLL - Cannot display");
+        return;
+    }
+    printf("\n");
+    do
+    {
+        printf("%d ->",temp->data);
+        temp=temp->next;
+    }while(temp!=start);
+} // clos eof display fn..
+
+
+void CLLdeletepos(int pos)
+{
+    node *temp=start,*delnode;
+    int i;
+    if(pos<0||count==0||pos>count)
+    {
+        printf("\nPosition does not exist - Cannot delete from CLL");
+        return;
+    }
+    if(pos==1)
+    {
+        delnode=start;
+        if(start==start->next)
+        start=NULL;
+        else
+        {
+            while(temp->next!=start)
+            temp=temp->next;  // gets last node address into temp
+            temp->next=start->next; // delnode->next
+            start=start->next;
+        }
+    }
+    else
+    {
+        for(i=1;i<=pos-2;i++)
+        {
+            temp=temp->next;
+        }
+        delnode=temp->next;
+        temp->next=delnode->next;
+    }
+    count--;
+    printf("\nDeleted element from CLL is %d",delnode->data);
+    free(delnode);
+}
+
+void CLLinsertpos(int pos)
+{
+    int i;
+    node *newnode,*temp=start;
+    if(pos<1||pos>count+1)
+    {
+        printf("\nPosition does not exist - Cannot insert into CLL");
+        return;
+    }
+    newnode=(node*)malloc(sizeof(node));
+    //printf("Enter data into node of CLL:");
+    scanf("%d",&newnode->data);
+    count++;
+    if(pos==1)
+    {
+        if(start==NULL)
+        {
+            start=newnode;
+            newnode->next=start; //newnode;
+        }
+        else
+        {
+            do
+            {
+                temp=temp->next;
+            }while(temp->next!=start);
+     
+            /*
+            while(temp->next!=start)
+            temp=temp->next
+            */
+       
+            temp->next=newnode;//b to x
+            newnode->next=start;//x to a
+            start=newnode; // x as start
+        } // else pos 1 close
+    } // if pos 1 close
+    else // for any other position other than 1
+    {
+        for(i=1;i<=pos-2;i++)
+        {
+            temp=temp->next;
+        }
+        newnode->next=temp->next;
+        temp->next=newnode;
+    }//else close
+
+}// function close.
+
+node* CLLsearch(int key)
+{
+    node *temp=start;
+    if(temp!=NULL)
+    {
+        do
+        {
+            if(key==temp->data)
+            return(temp);//successful return address of node
+            temp=temp->next;
+        }while(temp!=start);
+    }
+    return(NULL);//unsuccessful or list empty  retun NULL
+}

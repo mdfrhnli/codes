@@ -1,0 +1,45 @@
+#include<stdio.h>
+#define max 10
+void directed();
+void undirected();
+int G[max][max];
+void main(){
+    int ch;
+    scanf("%d",&ch);
+    switch(ch){
+        case 1 : directed();break;
+        case 2 : undirected();break;
+        deafult: printf("Invalid Choice");
+    }
+}
+void directed(){
+    int n,m,i,s,d,j;
+    scanf("%d%d",&n,&m);
+    for(i=0;i<m;i++){
+        scanf("%d%d",&s,&d);
+        G[s][d]=1;
+    }
+    printf("\nThe Adjacency Matrix for Directed Graph is:\n\n");
+    for(i=1;i<=n;i++){
+        printf("VERTEX %d :  ",i);
+        for(j=1;j<=n;j++)
+        printf("%d ",G[i][j]);
+        printf("\n");
+    }
+}
+void undirected(){
+    int n,m,i,s,d,j;
+    scanf("%d%d",&n,&m);
+    for(i=0;i<m;i++){
+        scanf("%d%d",&s,&d);
+        G[s][d]=1;
+        G[d][s]=1;
+    }
+    printf("\nThe Adjacency Matrix for Undirected Graph is:\n\n");
+    for(i=1;i<=n;i++){
+        printf("VERTEX %d :  ",i);
+        for(j=1;j<=n;j++)
+        printf("%d   ",G[i][j]);
+        printf("\n");
+    }
+}

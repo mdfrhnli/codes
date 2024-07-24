@@ -1,0 +1,169 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node*next;
+    struct node*pre;
+};
+struct node *head;
+void insert();
+void del();
+void display();
+void search();
+void reverse();
+int c=0,b=0;
+void main()
+{
+    int ch;
+    head=NULL;
+    while(1)
+    {
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1:insert();break;
+            case 2:del();break;
+            case 3:display();break;
+            case 4:search();break;
+            case 5:reverse();break;
+            case 6:exit(0);
+            default:printf("Invalid Choice");
+        }
+    }
+}
+void insert()
+{
+   int p,i,n;
+    struct node*temp=(struct node*)malloc(sizeof(struct node));
+    struct node*temp2,*x;
+    scanf("%d%d",&p,&n);
+    if(p<=0||p>c+1)
+    {
+        printf("\nPosition does not exist - Cannot insert into DLL");
+    }
+    else
+    {
+     c++;
+     temp->data=n;
+     temp->next=NULL;
+     temp->pre=NULL;
+     if(head==NULL)
+     head=temp;
+     else if (p==1)
+     {
+         x=head;
+         x->pre=temp;
+         temp->next=x;
+         head=temp;
+     }
+     else
+     {
+         temp2=head;
+         for(i=0;i<p-2;i++)
+             temp2=temp2->next;
+             temp->next=temp2->next;
+             temp2->next=temp;
+             temp->pre=temp2;
+             if(p!=c)
+             {
+                 temp2=temp->next;
+                 temp2->pre=temp;
+             }
+         
+     }
+    }
+}
+
+void del()
+{
+    int p,i;
+    struct node*temp1=head, *temp2;
+    scanf("%d",&p);
+    if(p<=0||p>c)
+    printf("\nPosition does not exist - Cannot delete from DLL");
+    else
+    {
+        c--;
+        if(p==1)
+        {
+            head=temp1->next;
+            if(c!=0)
+            {
+                temp2=temp1->next;
+                temp2->pre=temp1->pre;
+            }
+            printf("\nDeleted element from DLL is %d",temp1->data);
+            free(temp1);
+        }
+        else
+        {
+            for(i=0;i<p-2;i++)
+            {
+                temp1=temp1->next;
+            }
+            temp2=temp1->next;
+            temp1->next=temp2->next;
+            if(p!=c+1)
+            {
+                temp1=temp1->next;
+                temp1->pre=temp2->pre;
+            }
+            printf("\nDeleted element from DLL is %d",temp2->data);
+            free(temp2);
+        }
+    }
+}
+void search()
+{
+    int n,p=0,b=0;
+    struct node *x;
+    scanf("%d",&n);
+    x=head;
+    while(x!=NULL)
+    {
+        p++;
+        if(x->data==n)
+        {
+            b=1;
+            break;
+        }
+        x=x->next;
+    }
+    if(b==1)
+    printf("\n%d is found in DLL",n);
+    else
+    printf("\n%d is not found in DLL",n);
+}
+void display()
+{
+    struct node*x;
+    x=head;
+    printf("\n");
+    while(x!=NULL)
+    {
+        printf("%d->",x->data);
+        x=x->next;
+    }
+    if(head==NULL)
+    printf("Empty DLL-Cannot display");
+}
+void reverse()
+{
+    struct node *y;
+    y=head;int i;
+    printf("\n");
+    for(i=0;i<c-1;i++)
+    {
+        y=y->next;
+    }
+    while(y!=NULL)
+    {
+        printf("%d->",y->data);
+        y=y->pre;
+    }
+    if(head==NULL)
+    {
+        printf("Empty DLL - Cannot display");
+    }
+}

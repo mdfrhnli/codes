@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+struct node *head;
+void push(int);
+void pop();
+void display();
+void main()
+{
+    int n,a,p,ch;
+    head=NULL;
+    while(1)
+
+    {
+        scanf("%d",&ch);
+    
+    switch(ch){
+        case 1:scanf("%d",&n);
+        push(n);
+        break;
+        case 2:pop();
+        break;
+        case 3:display();
+        break;
+        case 4:exit(0);
+        break;
+        default: printf("\nInvalid Choice");
+    }
+}
+}
+void push(int n)
+{
+    struct node *temp=(struct node *)malloc(sizeof(struct node));
+    temp->data=n;
+    temp->next=head;
+    head=temp;
+}
+void pop()
+{
+    int i;
+    struct node *temp1=head;
+    if(head==NULL){
+    printf("\nSTACK UNDERFLOW - CANNOT POP");
+    exit(0);
+}
+else{
+    i=temp1->data;
+    head=temp1->next;
+}
+printf("\nPopped element from stack is %d",i);
+free(temp1);
+}
+void display()
+{
+    struct node *x;
+    x=head;
+    printf("\n");
+    if(head==NULL)
+    printf("\nEMPTY STACK-NOTHING TO DISPLAY");
+    else
+    {
+        printf("\nTHE ELEMENTS OF STACK ARE -");
+    
+    while(x!=NULL)
+    {
+    printf("%d->",x->data);
+    x=x->next;
+    }
+}
+}
